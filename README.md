@@ -5,7 +5,7 @@ StockTwits is a demo Android application which displays a StockTwits feed in rea
 * For image display : [ION](https://github.com/koush/ion#get-ion) & [Picasso](http://square.github.io/picasso/)
 * for HTML char escaping : [Jakarta Commons Lang](https://commons.apache.org/proper/commons-lang/download_lang.cgi)
 
-Dependencies for streamdata.io integration :
+Dependencies for Streamdata.io integration :
 * SSE: [Eventsource-android](https://github.com/tylerjroach/eventsource-android)
 * JSON library: [Jackson](https://github.com/FasterXML/jackson-databind)
 * JSON patch: [JSON Patch](https://github.com/fge/json-patch)
@@ -16,7 +16,7 @@ To run the sample:
 
 First clone this project from GitHub.
 
-Sign in on [streamdata.io](http://streamdata.io) to create your account and get your streamdata.io token.
+Sign in on <a href="http://streamdata.io" target="_blank">Streamdata.io</a> to create your account and get your Streamdata.io token.
 
 Copy your token.
 
