@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Stocktwits EURUSD</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="default_bio">Donec ullamcorper mi imperdiet risus placerat congue. Integer vulputate dui quis ligula lacinia, ac convallis leo finibus.</string>
+    <string name="default_body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent eget orci efficitur, varius metus a, commodo ligula.</string>
+    <string name="name">Cute kitten</string>
+    <string name="uname">\@Cthulu</string>
+    <string name="date">0000&#8211;00&#8211;00 at 10:10:10</string>
+    <string name="title_activity_full_view">Details</string>
+    <string name="location">No location</string>
+    <string name="exp">no experience</string>
+    <string name="approach">no approach</string>
+    <string name="h_p">no holding period</string>
+</resources>
