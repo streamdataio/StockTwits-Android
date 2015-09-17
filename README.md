@@ -1,5 +1,5 @@
 # StockTwits-Android
-Stocktwits is a demo Android application which displays a Stocktwits feed in real time using streamdata.io.
+StockTwits is a demo Android application which displays a StockTwits feed in real time using streamdata.io.
 
 ### Dependencies ###
 * For image display : [ION](https://github.com/koush/ion#get-ion) & [Picasso](http://square.github.io/picasso/)
