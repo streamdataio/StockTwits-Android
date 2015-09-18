@@ -31,14 +31,6 @@ public class EventSource implements EventSourceHandler {
     public static final int CLOSED = 2;
 
     private final ClientBootstrap bootstrap;
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
-
-        bootstrap.getFactory().releaseExternalResources();
-    }
-
     private final EventSourceChannelHandler clientHandler;
     private final EventSourceHandler eventSourceHandler;
 
@@ -218,5 +210,13 @@ public class EventSource implements EventSourceHandler {
 
     public EventSourceHandler getEventSourceHandler(){
         return eventSourceHandler;
+    }
+
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+
+        bootstrap.getFactory().releaseExternalResources();
     }
 }
