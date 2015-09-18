@@ -2,9 +2,7 @@ package com.streamdataio.stocktwits;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -56,8 +54,8 @@ public class DetailView extends AppCompatActivity {
         if(!"null".equals(user.getXpLevel())) {
             ((TextView) findViewById(R.id.experience)).setText(user.getXpLevel());
         }
-        if(!"null".equals(user.getHolding_p())) {
-            ((TextView) findViewById(R.id.holding_period)).setText(user.getHolding_p());
+        if(!"null".equals(user.getHoldingPeriod())) {
+            ((TextView) findViewById(R.id.holding_period)).setText(user.getHoldingPeriod());
         }
         if(!"null".equals(user.getApproach())) {
         ((TextView) findViewById(R.id.approach)).setText(user.getApproach() + " Approach");

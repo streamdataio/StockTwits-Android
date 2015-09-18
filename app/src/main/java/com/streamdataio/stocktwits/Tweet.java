@@ -8,11 +8,11 @@ public class Tweet implements Serializable{
     private String imgURL;
     private User user;
 
-    public Tweet(String body_, String date_time_, String imgUrl_, User u){
-        this.body = body_;
-        this.dateTime = date_time_; // time is GMT+0
-        this.imgURL = imgUrl_;
-        this.user = u;
+    public Tweet(String aBody, String aDateTime, String anImgUrl, User aUser){
+        this.body = aBody;
+        this.dateTime = aDateTime;
+        this.imgURL = anImgUrl;
+        this.user = aUser;
     }
 
     public String getBody() {
