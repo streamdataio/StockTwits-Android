@@ -4,20 +4,20 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
-    public String username;
-    public String name;
-    public String bio;
-    public String join;
-    public String avatarURL;
-    public String location;
-    public String followers;
-    public String following;
-    public String off;
-    public String xpLevel;
-    public String holding_p;
-    public String approach;
-    public String webURL;
-    public String ideas;
+    private String username;
+    private String name;
+    private String bio;
+    private String join;
+    private String avatarURL;
+    private String location;
+    private String followers;
+    private String following;
+    private String off;
+    private String xpLevel;
+    private String holding_p;
+    private String approach;
+    private String webURL;
+    private String ideas;
 
     public String getUsername() {
         return username;

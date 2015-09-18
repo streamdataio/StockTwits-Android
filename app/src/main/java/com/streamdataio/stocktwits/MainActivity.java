@@ -103,9 +103,9 @@ public class MainActivity extends AppCompatActivity implements EventSourceHandle
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Tweet t = tweets.get(position);
-                Intent i = new Intent(MainActivity.this,DetailView.class);
+                Intent i = new Intent(MainActivity.this, DetailView.class);
                 Bundle mBundle = new Bundle();
-                mBundle.putSerializable("tweet",t);
+                mBundle.putSerializable("tweet", t);
                 i.putExtras(mBundle);
                 startActivity(i);
             }
@@ -310,5 +310,6 @@ public class MainActivity extends AppCompatActivity implements EventSourceHandle
         if (eventSource != null && eventSource.isConnected()) {
             eventSource.close();
         }
+        eventSource = null;
     }
 }

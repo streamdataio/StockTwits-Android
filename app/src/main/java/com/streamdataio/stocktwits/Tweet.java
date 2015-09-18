@@ -3,10 +3,10 @@ package com.streamdataio.stocktwits;
 import java.io.Serializable;
 
 public class Tweet implements Serializable{
-    public String body;
-    public String dateTime;
-    public String imgURL;
-    public User user;
+    private String body;
+    private String dateTime;
+    private String imgURL;
+    private User user;
 
     public Tweet(String body_, String date_time_, String imgUrl_, User u){
         this.body = body_;

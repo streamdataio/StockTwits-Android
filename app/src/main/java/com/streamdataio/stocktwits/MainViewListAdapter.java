@@ -73,21 +73,21 @@ public class MainViewListAdapter extends BaseAdapter {
 
         if(tweets != null){
             // Set ui here
-            viewWrapper.tweet.setText(tweets.get(position).body);
-            viewWrapper.name.setText(tweets.get(position).user.name);
-            viewWrapper.userName.setText(tweets.get(position).user.username);
-            viewWrapper.date.setText(tweets.get(position).dateTime);
+            viewWrapper.tweet.setText(tweets.get(position).getBody());
+            viewWrapper.name.setText(tweets.get(position).getUser().getName());
+            viewWrapper.userName.setText(tweets.get(position).getUser().getUsername());
+            viewWrapper.date.setText(tweets.get(position).getDateTime());
             Ion.with(viewWrapper.avatar)
                     .placeholder(R.drawable.defaulticon)
                     .error(R.drawable.defaulticon)
-                    .load(tweets.get(position).user.avatarURL);
-            if (tweets.get(position).imgURL.isEmpty()){
+                    .load(tweets.get(position).getUser().getAvatarURL());
+            if (tweets.get(position).getImgURL().isEmpty()){
                 // Here we avoid loading a default picture from network or disk memory
                 // and leave the imageView empty
                 viewWrapper.img.setImageDrawable(null);
             } else {
                 mPicasso.with(activity)
-                        .load(tweets.get(position).imgURL)
+                        .load(tweets.get(position).getImgURL())
                         .into(viewWrapper.img);
             }
         }
