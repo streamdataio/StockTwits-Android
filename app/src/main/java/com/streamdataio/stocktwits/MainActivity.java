@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
+import com.google.common.base.Preconditions;
 import com.squareup.picasso.Picasso;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -41,8 +42,7 @@ import tylerjroach.com.eventsource_android.MessageEvent;
 
 
 public class MainActivity extends AppCompatActivity implements EventSourceHandler {
-    private static final String EMPTY_STRING = "";
-
+    private static final String TAG  = "StockTwits";
     private static final String STREAMDATA_TOKEN_PROPERTY_NAME = "streamdataToken";
     private static final String STOCKTWITS_API_PROPERTY_NAME = "api";
 
@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements EventSourceHandle
 
     /* NOTE: this API used without authentication limits to 200 calls/hour */
     private static final String DEFAULT_STOCKTWITS_API = "https://api.stocktwits.com/api/2/streams/symbol/EURUSD.json";
-    private static final String DEFAULT_STREAMDATA_TOKEN = EMPTY_STRING;
 
     private String streamdata_token = "";
     private String stockTwits_api = "";
@@ -69,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements EventSourceHandle
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -82,21 +80,21 @@ public class MainActivity extends AppCompatActivity implements EventSourceHandle
             InputStream inputStream = assetManager.open(PROPERTIES_FILE);
             Properties properties = new Properties();
             properties.load(inputStream);
-            System.out.println("The properties are now loaded");
-            System.out.println("properties: " + properties);
             // read token
-            streamdata_token = properties.getProperty(STREAMDATA_TOKEN_PROPERTY_NAME, DEFAULT_STREAMDATA_TOKEN);
+            streamdata_token = properties.getProperty(STREAMDATA_TOKEN_PROPERTY_NAME);
+            Preconditions.checkState(streamdata_token != null && streamdata_token.length() > 0 && !"YOUR_TOKEN_HERE".equals(streamdata_token),
+                    "streamdata.io token is not set. Please enter it in the properties file.");
             // read api if provided, otherwise use DEFAULT_STOCKTWITS_API.
             stockTwits_api = properties.getProperty(STOCKTWITS_API_PROPERTY_NAME, DEFAULT_STOCKTWITS_API);
 
             // build request headers map
             requestHeaders.put(STREAMDATA_TOKEN_HEADER_NAME, streamdata_token);
         } catch (IOException e) {
-            Log.e("File Error", e.getMessage(),e);
+            Log.e(TAG, e.getMessage(),e);
         }
 
         mainListView = (ListView) findViewById(R.id.listView);
-        mainListViewAdapter = new MainViewListAdapter(this, tweets);
+        mainListViewAdapter = new MainViewListAdapter(this,tweets);
         mainListView.setAdapter(mainListViewAdapter);
 
         mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -138,12 +136,14 @@ public class MainActivity extends AppCompatActivity implements EventSourceHandle
     /* ******************************* SSEHandler implementation ************************************ */
     @Override
     public void onConnect() throws Exception {
-        Log.v("SSE Connected", "True");
+        if (Log.isLoggable(TAG, Log.VERBOSE))
+            Log.v(TAG, "SSE Connected");
     }
 
     @Override
     public void onMessage(String event, MessageEvent message) throws Exception {
-        Log.v("SSE Message", event);
+        if (Log.isLoggable(TAG, Log.VERBOSE))
+            Log.v(TAG, event);
         try {
             if ("data".equals(event)) {
                 data = jsonObjectMapper.readTree(message.data);
@@ -182,46 +182,48 @@ public class MainActivity extends AppCompatActivity implements EventSourceHandle
                 }
             }
         } catch (Exception e) {
-            Log.e("Message parsing error", e.getMessage(), e);
+            Log.e(TAG, e.getMessage(), e);
         }
     }
 
     @Override
     public void onError(Throwable t) {
-        Log.e("SSE error", t.getMessage(), t);
+        Log.e(TAG, t.getMessage(), t);
     }
 
     @Override
     public void onClosed(boolean willReconnect) {
-        Log.v("SSE Closed.", "reconnect=" + willReconnect);
+        if (Log.isLoggable(TAG, Log.VERBOSE))
+            Log.v(TAG, "reconnect=" + willReconnect);
     }
 
     /* ******************************* END SSEHandler implementation ************************************ */
 
 
     private void updateList() {
-
         JsonNode jsonData = data.get("messages");
         tweets.clear();
 
         for (Iterator<JsonNode> i = jsonData.iterator(); i.hasNext(); ) {
             JsonNode jsonTweet = i.next();
             // creating user from json object
+            JsonNode userNode = jsonTweet.get("user");
+
             User user = new User(
                     "@" + jsonTweet.get("user").get("username").asText(),
                     jsonTweet.get("user").get("name").asText(),
-                    StringEscapeUtils.unescapeHtml4(jsonTweet.get("user").get("bio").asText()),
-                    jsonTweet.get("user").get("join_date").asText(),
-                    jsonTweet.get("user").get("avatar_url").asText(),
-                    jsonTweet.get("user").get("location").asText(),
-                    jsonTweet.get("user").get("followers").asText(),
-                    jsonTweet.get("user").get("following").asText(),
-                    jsonTweet.get("user").get("identity").asText(),
-                    jsonTweet.get("user").get("trading_strategy").get("experience").asText(),
-                    jsonTweet.get("user").get("trading_strategy").get("holding_period").asText(),
-                    jsonTweet.get("user").get("trading_strategy").get("approach").asText(),
-                    jsonTweet.get("user").get("website_url").asText(),
-                    jsonTweet.get("user").get("ideas").asText()
+                    StringEscapeUtils.unescapeHtml4(userNode.get("bio").asText()),
+                    userNode.get("join_date").asText(),
+                    userNode.get("avatar_url").asText(),
+                    userNode.get("location").asText(),
+                    userNode.get("followers").asText(),
+                    userNode.get("following").asText(),
+                    userNode.get("identity").asText(),
+                    userNode.get("trading_strategy").get("experience").asText(),
+                    userNode.get("trading_strategy").get("holding_period").asText(),
+                    userNode.get("trading_strategy").get("approach").asText(),
+                    userNode.get("website_url").asText(),
+                    userNode.get("ideas").asText()
             );
 
             // created_at format "[date]T[time]Z".
@@ -262,8 +264,7 @@ public class MainActivity extends AppCompatActivity implements EventSourceHandle
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
         boolean isNetworkConnected =
-                (activeNetwork != null)
-                &&
+                (activeNetwork != null) &&
                 (activeNetwork.isConnectedOrConnecting());
 
         if (isNetworkConnected) {
@@ -272,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements EventSourceHandle
                 eventSource = new EventSource(new URI(STREAMDATA_PROXY_ADDRESS), new URI(stockTwits_api), this, requestHeaders);
                 eventSource.connect();
             } catch (URISyntaxException e) {
-                Log.e("Bad URL", e.getMessage(), e);
+                Log.e(TAG, e.getMessage(), e);
             }
         } else {
             runOnUiThread(new Runnable() {
