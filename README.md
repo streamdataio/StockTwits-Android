@@ -27,3 +27,7 @@ streamdataToken=YOUR_TOKEN_HERE
 Open the project with Android Studio.
 
 Run the app.
+
+### Other resources ###
+
+In addition, you may be interested in reading this blog post which complements this demo: http://streamdata.io/blog/android-stocktwits-real-time-feed/
