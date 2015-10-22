@@ -211,28 +211,28 @@ public class MainActivity extends AppCompatActivity implements EventSourceHandle
 
             User user = new User(
                     "@" + jsonTweet.get("user").get("username").asText(),
-                    jsonTweet.get("user").get("name").asText(),
-                    StringEscapeUtils.unescapeHtml4(userNode.get("bio").asText()),
-                    userNode.get("join_date").asText(),
-                    userNode.get("avatar_url").asText(),
-                    userNode.get("location").asText(),
-                    userNode.get("followers").asText(),
-                    userNode.get("following").asText(),
-                    userNode.get("identity").asText(),
-                    userNode.get("trading_strategy").get("experience").asText(),
-                    userNode.get("trading_strategy").get("holding_period").asText(),
-                    userNode.get("trading_strategy").get("approach").asText(),
-                    userNode.get("website_url").asText(),
-                    userNode.get("ideas").asText()
+                    (!userNode.path("name").isMissingNode())?userNode.get("name").asText():"",
+                    (!userNode.path("bio").isMissingNode())?StringEscapeUtils.unescapeHtml4(userNode.get("bio").asText()):"",
+                    (!userNode.path("join_date").isMissingNode())?userNode.get("join_date").asText():"",
+                    (!userNode.path("avatar_url").isMissingNode())?userNode.get("avatar_url").asText():"",
+                    (!userNode.path("location").isMissingNode())?userNode.get("location").asText():"",
+                    (!userNode.path("followers").isMissingNode())?userNode.get("followers").asText():"",
+                    (!userNode.path("following").isMissingNode())?userNode.get("following").asText():"",
+                    (!userNode.path("identity").isMissingNode())?userNode.get("identity").asText():"",
+                    (!userNode.path("trading_strategy").path("experience").isMissingNode())?userNode.get("trading_strategy").get("experience").asText():"",
+                    (!userNode.path("trading_strategy").path("holding_period").isMissingNode())?userNode.get("trading_strategy").get("holding_period").asText():"",
+                    (!userNode.path("trading_strategy").path("approach").isMissingNode())?userNode.get("trading_strategy").get("approach").asText():"",
+                    (!userNode.path("website_url").isMissingNode())?userNode.get("website_url").asText():"",
+                    (!userNode.path("ideas").isMissingNode())?userNode.get("ideas").asText():""
             );
 
             // created_at format "[date]T[time]Z".
             // Note: T = Tag and Z = Zeit
             // build readable date time
-            String date = jsonTweet.get("created_at").asText().replace("T", " at ").replace("Z", "");
+            String date = (!jsonTweet.path("created_at").isMissingNode())?jsonTweet.get("created_at").asText().replace("T", " at ").replace("Z", ""):"";
 
             // unescape the HTML in the text
-            String body = StringEscapeUtils.unescapeHtml4(jsonTweet.get("body").asText());
+            String body = StringEscapeUtils.unescapeHtml4((!jsonTweet.path("body").isMissingNode())?jsonTweet.get("body").asText():"");
 
             String imageUrl = "";
             if (!jsonTweet.path("entities").path("chart").path("large").isMissingNode()) {
