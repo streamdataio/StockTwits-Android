@@ -269,9 +269,7 @@ public class MainActivity extends AppCompatActivity implements EventSourceHandle
 
         if (isNetworkConnected) {
             try {
-                disconnect();
                 eventSource = new EventSource(new URI(STREAMDATA_PROXY_ADDRESS), new URI(stockTwits_api), this, requestHeaders);
-                eventSource.connect();
             } catch (URISyntaxException e) {
                 Log.e(TAG, e.getMessage(), e);
             }
@@ -287,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements EventSourceHandle
     }
 
     private void disconnect() {
-        if (eventSource != null && eventSource.isConnected()) {
+        if (eventSource != null) {
             eventSource.close();
         }
         eventSource = null;
